@@ -2,38 +2,71 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bhavith's Portfolio</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       background-color: #f4f4f9;
+      line-height: 1.6;
+      font-size: 1rem;
       color: #333;
     }
+
     header {
       background-color: #2c3e50;
       color: white;
       padding: 2rem 1rem;
       text-align: center;
     }
+
     main {
       max-width: 900px;
       margin: 2rem auto;
-      padding: 1rem;
+      padding: 1.5rem 1rem;
       background-color: white;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
     }
+
     section {
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
+
+    p,
+    li {
+      margin-bottom: 0.75rem;
+      color: #444;
+    }
+
+    ul {
+      padding-left: 1.25rem;
+    }
+
     h2 {
       color: #2c3e50;
       border-bottom: 2px solid #ddd;
       padding-bottom: 0.3rem;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-weight: 600;
     }
+
+    a {
+      color: #2c3e50;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    a:hover,
+    a:focus {
+      border-bottom: 1px solid #2c3e50;
+      outline: none;
+    }
+
     .certificate-img {
       width: 100%;
       max-width: 600px;
@@ -41,17 +74,100 @@
       margin-bottom: 1rem;
       border: 1px solid #ccc;
       border-radius: 4px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
+
     footer {
       text-align: center;
-      padding: 1rem;
+      padding: 1.5rem 1rem;
       font-size: 0.9rem;
       color: #777;
+      background-color: #fafafa;
+      border-top: 1px solid #eee;
+      margin-top: 3rem;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      main {
+        margin: 1rem;
+        padding: 1rem;
+      }
+
+      header {
+        padding: 1.5rem 1rem;
+      }
+    }
+
+    /* Grade tabs navigation */
+    .grade-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .grade-tabs button {
+      background: #2c3e50;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .grade-tabs button[aria-selected="true"] {
+      background: #34495e;
+      cursor: default;
+    }
+
+    .grade-tabs button:hover:not([aria-selected="true"]) {
+      background: #3a5068;
     }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       console.log("Portfolio loaded successfully.");
+
+      const tabs = document.querySelectorAll('.grade-tabs button');
+      const panels = document.querySelectorAll('[role="tabpanel"]');
+      const gradeHeader = document.getElementById('grade-header');
+
+      function updateGradeHeader(grade) {
+        gradeHeader.textContent = grade;
+      }
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // If this tab is already selected, do nothing
+          if (tab.getAttribute('aria-selected') === 'true') return;
+
+          // Deselect all tabs and hide all panels
+          tabs.forEach(t => {
+            t.setAttribute('aria-selected', 'false');
+            t.tabIndex = -1;
+          });
+          panels.forEach(panel => panel.hidden = true);
+
+          // Select clicked tab and show associated panel
+          tab.setAttribute('aria-selected', 'true');
+          tab.tabIndex = 0;
+          const panelId = tab.getAttribute('aria-controls');
+          const panel = document.getElementById(panelId);
+          panel.hidden = false;
+          panel.focus();
+
+          // Update the grade header text
+          updateGradeHeader(tab.textContent);
+        });
+      });
+
+      // Set default grade header text on page load
+      updateGradeHeader('9th Grade');
     });
   </script>
 </head>
@@ -65,30 +181,60 @@
   <main>
     <section>
       <h2>About Me</h2>
-      <p>I am a dedicated student with strong interests in cybersecurity, computer science, linguistics, and law. My ambition is to combine these fields into a meaningful career that serves both public good and technological advancement. I intend to pursue higher education at the University of Cambridge and make a global impact in digital security.</p>
+      <p>
+        I am a dedicated student with strong interests in cybersecurity, computer science, linguistics, and law.
+        My ambition is to combine these fields into a meaningful career that serves both public good and technological
+        advancement. I intend to pursue higher education at the University of Cambridge and make a global impact in
+        digital security.
+      </p>
     </section>
 
     <section>
-      <section>
-  <h2>Achievements & Certificates (In order from Oldest to Latest)</h2>
-  <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/Screenshot%202025-07-12%20162454.png" alt="Cisco Intro to Cybersecurity Certificate" class="certificate-img">
-  <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/Screenshot%202025-07-12%20181548.png" alt="freeCodeCamp Responsive Web Certificate" class="certificate-img">
-  <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-22_180953566.png" alt="IBM Fundamentals of Cybersecurity Certificate" class="certificate-img">
-  <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-24_144407832.png" alt="IBM Digital Literacy Certificate" class="certificate-img">
-  <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-26_000553251.png" alt="French Certiifcate" class="certificate-img">
-  <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-26_002251041.png" alt="IBM Digital Mindset Certificate" class="certificate-img">
+      <h2>Achievements & Certificates (In order from Oldest to Latest)</h2>
 
-</section>
+      <!-- Dynamic grade header -->
+      <h1 id="grade-header" tabindex="0" style="margin-bottom: 1rem;">9th Grade</h1>
 
-      
+      <!-- Grade navigation tabs -->
+      <nav class="grade-tabs" role="tablist" aria-label="Grade Level Certificates">
+        <button role="tab" aria-selected="true" aria-controls="grade9" id="tab9" tabindex="0">9th Grade</button>
+        <button role="tab" aria-selected="false" aria-controls="grade10" id="tab10" tabindex="-1">10th Grade</button>
+        <button role="tab" aria-selected="false" aria-controls="grade11" id="tab11" tabindex="-1">11th Grade</button>
+        <button role="tab" aria-selected="false" aria-controls="grade12" id="tab12" tabindex="-1">12th Grade</button>
+      </nav>
+
+      <!-- Tab panels -->
+      <div tabindex="0" role="tabpanel" id="grade9" aria-labelledby="tab9">
+        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/Screenshot%202025-07-12%20162454.png" alt="Cisco Intro to Cybersecurity Certificate" class="certificate-img" />
+        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/Screenshot%202025-07-12%20181548.png" alt="freeCodeCamp Responsive Web Certificate" class="certificate-img" />
+        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-22_180953566.png" alt="IBM Fundamentals of Cybersecurity Certificate" class="certificate-img" />
+        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-24_144407832.png" alt="IBM Digital Literacy Certificate" class="certificate-img" />
+        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-26_000553251.png" alt="French Certificate" class="certificate-img" />
+        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-26_002251041.png" alt="IBM Digital Mindset Certificate" class="certificate-img" />
+      </div>
+
+      <div tabindex="0" role="tabpanel" id="grade10" aria-labelledby="tab10" hidden>
+        <h2>10th Grade</h2>
+        <p>I haven’t reached this grade level yet.</p>
+      </div>
+
+      <div tabindex="0" role="tabpanel" id="grade11" aria-labelledby="tab11" hidden>
+        <h2>11th Grade</h2>
+        <p>I haven’t reached this grade level yet.</p>
+      </div>
+
+      <div tabindex="0" role="tabpanel" id="grade12" aria-labelledby="tab12" hidden>
+        <h2>12th Grade</h2>
+        <p>I haven’t reached this grade level yet.</p>
+      </div>
     </section>
 
     <section>
       <h2>Education</h2>
       <ul>
-        <li>9th Grade: GT Geometry, AP Human Geography, AP Computer Science Principals, GT Humanities, Honours Biology, French I Honours, Principals of Health Science, and Colour Guard/Winterguard.</li>
-        <li>Self-study: Philosophy, Linguistics, Cybersecurity, Law, Typing, French, Advanced Grade level English, Math, Science, and History.</li>
-        <li>Future Plans: Get a PhD in Cybersecurity at The University of Cambridge, Become a Cheif Information of Security Officer (CISO) at Google, and Become a local Law Enforcement Officery</li>
+        <li>9th Grade: GT Geometry, AP Human Geography, AP Computer Science Principles, GT Humanities, Honours Biology, French I Honours, Principles of Health Science, and Colour Guard/Winterguard.</li>
+        <li>Self-study: Philosophy, Linguistics, Cybersecurity, Law, Typing, French, Advanced Grade level English, Maths, Science, and History.</li>
+        <li>Future Plans: Get a PhD in Cybersecurity at The University of Cambridge, Become a Chief Information Security Officer (CISO) at Google, and Become a local Law Enforcement Officer.</li>
       </ul>
     </section>
 
@@ -97,42 +243,37 @@
       <ul>
         <li>Python, HTML, CSS, JavaScript</li>
         <li>Cybersecurity Training</li>
-        <li>AP Level Writting Skills</li>
+        <li>AP Level Writing Skills</li>
         <li>Advanced Linguistics Skills in IPA</li>
-        <li>Studies Philosphy for fun</li>
-
+        <li>Studies Philosophy for fun</li>
       </ul>
     </section>
 
-        <section>
+    <section>
       <h2>Achievements</h2>
       <ul>
         <li>Earned 3 years of credit in the Telugu LOTE CBE. (Achieved in US 8th Grade / UK Year 9 Spring)</li>
         <li>Earned Algebra 1 credit in the Algebra 1A and 1B CBEs. (Achieved in US 8th Grade / UK Year 9 Summer)</li>
         <li>High MAP scores in Maths (280), Science (240), and English (242) (Achieved in US 8th Grade / UK Year 9 Spring).</li>
-        <li>Scored 99th percentlie in Maths, 99th percentile in Science, 84th percentile in U.S History, and 75th percentlie in English STAAR Exams. (Achieved in US 8th Grade / UK Year 9 Summer)</li>
-        
+        <li>Scored 99th percentile in Maths, 99th percentile in Science, 84th percentile in U.S History, and 75th percentile in English STAAR Exams. (Achieved in US 8th Grade / UK Year 9 Summer)</li>
       </ul>
     </section>
-
 
     <section>
       <h2>Projects</h2>
       <ul>
         <li>This website hosted on GitHub</li>
-        <li>Datacraft Technologies. link: <a href = "https://datacraft-technologies-14506471.codehs.me/index.html">Datacraft Technologies</a> (Made in US 8th Grade / UK Year 9)</li>
-        <li>Video game start screen design using JavaScript Graphics. link: <a href = "https://codehs.com/sandbox/bhavith123/bhavith-v-vg-2nd-2025">Javascript Design</a>(Made in US 8th Grade / UK Year 9)</li>
+        <li>Datacraft Technologies. Link: <a href="https://datacraft-technologies-14506471.codehs.me/index.html" target="_blank" rel="noopener noreferrer">Datacraft Technologies</a> (Made in US 8th Grade / UK Year 9)</li>
+        <li>Video game start screen design using JavaScript Graphics. Link: <a href="https://codehs.com/sandbox/bhavith123/bhavith-v-vg-2nd-2025" target="_blank" rel="noopener noreferrer">JavaScript Design</a> (Made in US 8th Grade / UK Year 9)</li>
       </ul>
     </section>
 
     <section>
       <h2>Contact</h2>
       <p>Email: <em>bhavithvutukuri@gmail.com</em></p>
-      <p>GitHub: <a href="https://github.com/Bafythdeveloper" target="_blank">github.com/Bafythdeveloper</a></p>
-      <p>Credly: <a href="https://www.credly.com/users/bhavith-vutukuri/badges#credly">Bhavith Vutukuri Credly Dashboard</a></p>
-      <p>Schoolhouse.world: <a href="https://schoolhouse.world/transcript/3a622525-1525-42d7-9c8d-389ec91b9324">Schoolhouse.world Certifications</a></p>
-    </section>
-  </main>
+      <p>GitHub: <a href="https://github.com/Bafythdeveloper" target="_blank" rel="noopener noreferrer">github.com/Bafythdeveloper</a></p>
+      <p>Credly: <a href="https://www.credly.com/users/bhavith-vutukuri/badges#credly" target="_blank" rel="noopener noreferrer">Bhavith V
+        
 
   <footer>
     &copy; 2025 Bhavith Vutukuri. All rights reserved.
