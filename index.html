@@ -5,14 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bhavith's Portfolio</title>
- 
+
   <script>
-  // If there are any query parameters, remove them from the URL
-  if (window.location.search) {
-    window.history.replaceState(null, '', window.location.pathname);
-  }
-</script>
-  
+    // If there are any query parameters, remove them from the URL
+    if (window.location.search) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  </script>
+
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -61,7 +61,6 @@
       margin-bottom: 1rem;
       font-weight: 600;
     }
-
 
     a:hover,
     a:focus {
@@ -130,7 +129,25 @@
     .grade-tabs button:hover:not([aria-selected="true"]) {
       background: #3a5068;
     }
+
+    /* Resume link styled like buttons */
+    .tab-link {
+      background: #2c3e50;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .tab-link:hover {
+      background: #3a5068;
+    }
   </style>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       console.log("Portfolio loaded successfully.");
@@ -145,17 +162,14 @@
 
       tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-          // If this tab is already selected, do nothing
           if (tab.getAttribute('aria-selected') === 'true') return;
 
-          // Deselect all tabs and hide all panels
           tabs.forEach(t => {
             t.setAttribute('aria-selected', 'false');
             t.tabIndex = -1;
           });
           panels.forEach(panel => panel.hidden = true);
 
-          // Select clicked tab and show associated panel
           tab.setAttribute('aria-selected', 'true');
           tab.tabIndex = 0;
           const panelId = tab.getAttribute('aria-controls');
@@ -163,12 +177,10 @@
           panel.hidden = false;
           panel.focus();
 
-          // Update the grade header text
           updateGradeHeader(tab.textContent);
         });
       });
 
-      // Set default grade header text on page load
       updateGradeHeader('9th Grade');
     });
   </script>
@@ -177,7 +189,7 @@
 <body>
   <header>
     <h1>Bhavith's Professional Portfolio</h1>
-    <p style = "color: white">Cybersecurity Professional | Future CISO | Cambridge Applicant</p>
+    <p style="color: white">Cybersecurity Professional | Future CISO | Cambridge Applicant</p>
   </header>
 
   <main>
@@ -199,13 +211,13 @@
 
       <!-- Grade navigation tabs -->
       <center>
-      <nav class="grade-tabs" role="tablist" aria-label="Grade Level Certificates">
-        <button role="tab" aria-selected="true" aria-controls="grade9" id="tab9" tabindex="0">9th Grade</button>
-        <button role="tab" aria-selected="false" aria-controls="grade10" id="tab10" tabindex="-1">10th Grade</button>
-        <button role="tab" aria-selected="false" aria-controls="grade11" id="tab11" tabindex="-1">11th Grade</button>
-        <button role="tab" aria-selected="false" aria-controls="grade12" id="tab12" tabindex="-1">12th Grade</button>
-        <button role="tab" aria-selected="false" aria-controls="resume" id="tabResume" tabindex="-1">Résumé</button>
-      </nav>
+        <nav class="grade-tabs" role="tablist" aria-label="Grade Level Certificates">
+          <button role="tab" aria-selected="true" aria-controls="grade9" id="tab9" tabindex="0">9th Grade</button>
+          <button role="tab" aria-selected="false" aria-controls="grade10" id="tab10" tabindex="-1">10th Grade</button>
+          <button role="tab" aria-selected="false" aria-controls="grade11" id="tab11" tabindex="-1">11th Grade</button>
+          <button role="tab" aria-selected="false" aria-controls="grade12" id="tab12" tabindex="-1">12th Grade</button>
+          <a href="resume.html" class="tab-link">Résumé</a>
+        </nav>
       </center>
 
       <!-- Tab panels -->
@@ -219,24 +231,6 @@
         <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/refs/heads/main/image_2025-08-01_183851588.png" alt="IBM Data Science Certificate (Level 1)" class="certificate-img" />
         <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/refs/heads/main/image_2025-08-05_223436011.png" alt="Cisco Networking Basics Certificate" class="certificate-img" />
         <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-08-10_185710638.png" alt="IBM Data Science Certificate (Level 1)" class="certificate-img">
-
-  <div tabindex="0" role="tabpanel" id="grade10" aria-labelledby="tab10" hidden>
-    <p>I haven’t reached this grade level yet.</p>
-  </div>
-
-  <div tabindex="0" role="tabpanel" id="grade11" aria-labelledby="tab11" hidden>
-    <p>I haven’t reached this grade level yet.</p>
-  </div>
-
-  <div tabindex="0" role="tabpanel" id="grade12" aria-labelledby="tab12" hidden>
-    <p>I haven’t reached this grade level yet.</p>
-  </div>
-
-<!-- Résumé tab panel -->
-<a href = "resume.html">
-        <div tabindex="0" role="tabpanel" id="resume" aria-labelledby="tabResume" hidden>
-  <h2>Résumé</h2>
-</a>
       </div>
 
       <div tabindex="0" role="tabpanel" id="grade10" aria-labelledby="tab10" hidden>
@@ -253,7 +247,6 @@
     </section>
 
     <section>
- 
       <h2>Education</h2>
       <ul>
         <li>US 9th Grade / UK Year 10. </li>
@@ -304,5 +297,5 @@
   <footer>
     &copy; 2025 Bhavith Vutukuri. All rights reserved.
   </footer>
-
+</body>
 </html>
