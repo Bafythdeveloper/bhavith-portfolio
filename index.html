@@ -1,311 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bhavith's Portfolio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bhavith | Cybersecurity Portfolio</title>
 
-  <script>
-    // If there are any query parameters, remove them from the URL
-    if (window.location.search) {
-      window.history.replaceState(null, '', window.location.pathname);
+<style>
+body {
+  margin:0;
+  font-family: 'Segoe UI', sans-serif;
+  background:#020617;
+  color:#e6f1ff;
+  overflow-x:hidden;
+}
+
+/* MATRIX CANVAS FIXED */
+canvas {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+  pointer-events:none;
+}
+
+main {
+  position:relative;
+  z-index:1;
+}
+
+section {
+  padding:80px 10%;
+  opacity:0;
+  transform:translateY(40px);
+  transition: all 0.8s ease;
+}
+
+section.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+
+h1,h2 { color:#00eaff; }
+
+header {
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  position:relative;
+  z-index:1;
+}
+
+header h1 {
+  font-size:3rem;
+  text-shadow:0 0 20px #00eaff;
+}
+
+.cert-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+
+.cert-card {
+  background:#0a0f1f;
+  border:1px solid #00eaff33;
+  border-radius:10px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.cert-card:hover {
+  transform:scale(1.05);
+  box-shadow:0 0 20px #00eaff;
+}
+
+.cert-card img { width:100%; }
+
+.cert-desc {
+  padding:10px;
+  font-size:0.9rem;
+}
+
+.modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:10;
+}
+
+.modal img {
+  max-width:80%;
+  border:2px solid #00eaff;
+}
+
+footer {
+  text-align:center;
+  padding:40px;
+  border-top:1px solid #00eaff33;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+
+// ===== MATRIX BACKGROUND (FIXED) =====
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+const letters = "01";
+const fontSize = 14;
+
+function initDrops(){
+  const cols = Math.floor(canvas.width / fontSize);
+  return Array(cols).fill(0).map(()=> Math.random() * (canvas.height / fontSize));
+}
+
+let drops = initDrops();
+
+window.addEventListener("resize", ()=>{
+  resizeCanvas();
+  drops = initDrops();
+});
+
+function draw(){
+  ctx.fillStyle = "rgba(2,6,23,0.2)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle = "#00eaff";
+  ctx.font = fontSize + "px monospace";
+
+  for(let i=0;i<drops.length;i++){
+    const text = letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+    if(drops[i]*fontSize > canvas.height && Math.random()>0.975){
+      drops[i]=0;
     }
-  </script>
 
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      background-color: #f4f4f9;
-      line-height: 1.6;
-      font-size: 1rem;
-      color: #333;
+    drops[i]++;
+  }
+}
+
+setInterval(draw,33);
+
+// ===== SCROLL ANIMATION =====
+const sections=document.querySelectorAll("section");
+window.addEventListener("scroll",()=>{
+  sections.forEach(sec=>{
+    const top=sec.getBoundingClientRect().top;
+    if(top<window.innerHeight-100){
+      sec.classList.add("visible");
     }
+  });
+});
 
-    header {
-      background-color: #2c3e50;
-      color: white;
-      padding: 2rem 1rem;
-      text-align: center;
-    }
+// ===== MODAL =====
+const modal=document.getElementById("modal");
+const modalImg=document.getElementById("modal-img");
+const modalText=document.getElementById("modal-text");
 
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 1.5rem 1rem;
-      background-color: white;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-    }
+document.querySelectorAll(".cert-card").forEach(card=>{
+  card.addEventListener("click",()=>{
+    modal.style.display="flex";
+    modalImg.src=card.querySelector("img").src;
+    modalText.textContent=card.dataset.desc;
+  });
+});
 
-    section {
-      margin-bottom: 2.5rem;
-    }
+modal.addEventListener("click",()=> modal.style.display="none");
 
-    p,
-    li {
-      margin-bottom: 0.75rem;
-      color: #444;
-    }
-
-    ul {
-      padding-left: 1.25rem;
-    }
-
-    h2 {
-      color: #2c3e50;
-      border-bottom: 2px solid #ddd;
-      padding-bottom: 0.3rem;
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
-
-    a:hover,
-    a:focus {
-      border-bottom: 1px solid #2c3e50;
-      outline: none;
-    }
-
-    .certificate-img {
-      width: 100%;
-      max-width: 600px;
-      height: auto;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1.5rem 1rem;
-      font-size: 0.9rem;
-      color: #777;
-      background-color: #fafafa;
-      border-top: 1px solid #eee;
-      margin-top: 3rem;
-    }
-
-    /* Responsive tweaks */
-    @media (max-width: 600px) {
-      main {
-        margin: 1rem;
-        padding: 1rem;
-      }
-
-      header {
-        padding: 1.5rem 1rem;
-      }
-    }
-
-    /* Grade tabs navigation */
-    .grade-tabs {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .grade-tabs button {
-      background: #2c3e50;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      border-radius: 4px;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-    }
-
-    .grade-tabs button[aria-selected="true"] {
-      background: #34495e;
-      cursor: default;
-    }
-
-    .grade-tabs button:hover:not([aria-selected="true"]) {
-      background: #3a5068;
-    }
-
-    /* Resume link styled like buttons */
-    .tab-link {
-      background: #2c3e50;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      border-radius: 4px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .tab-link:hover {
-      background: #3a5068;
-    }
-  </style>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log("Portfolio loaded successfully.");
-
-      const tabs = document.querySelectorAll('.grade-tabs button');
-      const panels = document.querySelectorAll('[role="tabpanel"]');
-      const gradeHeader = document.getElementById('grade-header');
-
-      function updateGradeHeader(grade) {
-        gradeHeader.textContent = grade;
-      }
-
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          if (tab.getAttribute('aria-selected') === 'true') return;
-
-          tabs.forEach(t => {
-            t.setAttribute('aria-selected', 'false');
-            t.tabIndex = -1;
-          });
-          panels.forEach(panel => panel.hidden = true);
-
-          tab.setAttribute('aria-selected', 'true');
-          tab.tabIndex = 0;
-          const panelId = tab.getAttribute('aria-controls');
-          const panel = document.getElementById(panelId);
-          panel.hidden = false;
-          panel.focus();
-
-          updateGradeHeader(tab.textContent);
-        });
-      });
-
-      updateGradeHeader('9th Grade');
-    });
-  </script>
+});
+</script>
 </head>
 
 <body>
-  <header>
-    <h1>Bhavith's Professional Portfolio</h1>
-    <p style="color: white">Cybersecurity Professional | Future CISO | Cambridge Applicant</p>
-  </header>
 
-  <main>
-    <section>
-      <h2>About Me</h2>
-      <p>
-        I am a dedicated student with strong interests in cybersecurity, computer science, linguistics, and law.
-        My ambition is to combine these fields into a meaningful career that serves both public good and technological
-        advancement. I intend to pursue higher education at the University of Cambridge and make a global impact in
-        digital security.
-      </p>
-    </section>
+<canvas id="matrix"></canvas>
 
-    <section>
-      <h2>Achievements & Certificates (In order from Oldest to Latest)</h2>
+<header>
+  <h1>Bhavith Vutukuri</h1>
+  <p>Cybersecurity • Computer Science • Computer Hardware Engineering • Mathematics</p>
+</header>
 
-      <!-- Dynamic grade header -->
-      <h1 id="grade-header" tabindex="0" style="margin-bottom: 1rem;">9th Grade</h1>
+<main>
 
-      <!-- Grade navigation tabs -->
-      <center>
-        <nav class="grade-tabs" role="tablist" aria-label="Grade Level Certificates">
-          <button role="tab" aria-selected="true" aria-controls="grade9" id="tab9" tabindex="0">9th Grade</button>
-          <button role="tab" aria-selected="false" aria-controls="grade10" id="tab10" tabindex="-1">10th Grade</button>
-          <button role="tab" aria-selected="false" aria-controls="grade11" id="tab11" tabindex="-1">11th Grade</button>
-          <button role="tab" aria-selected="false" aria-controls="grade12" id="tab12" tabindex="-1">12th Grade</button>
-          <button role="tab" aria-selected="false" aria-controls="tutoring" id="tab-tutoring" tabindex="-1">Tutoring Qualifications</button>
+<section>
+<h2>About Me</h2>
+<p>I am a high-achieving student specialising in cybersecurity, programming, and analytical disciplines. I focus on logical reasoning, systems thinking, and security analysis. My ambition is to reach Cambridge and build a career in cybersecurity leadership while contributing to public safety.</p>
+</section>
 
-          <a href="resume.html" class="tab-link">Résumé</a>
-        </nav>
-      </center>
+<section>
+<h2>Certificates</h2>
+<div class="cert-grid">
 
-      <!-- Tab panels -->
-      <div tabindex="0" role="tabpanel" id="grade9" aria-labelledby="tab9">
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/Screenshot%202025-07-12%20162454.png" alt="Cisco Intro to Cybersecurity Certificate" class="certificate-img" />
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/Screenshot%202025-07-12%20181548.png" alt="freeCodeCamp Responsive Web Certificate" class="certificate-img" />
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-22_180953566.png" alt="IBM Fundamentals of Cybersecurity Certificate" class="certificate-img" />
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-24_144407832.png" alt="IBM Digital Literacy Certificate" class="certificate-img" />
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-26_000553251.png" alt="French Certificate" class="certificate-img" />
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-26_002251041.png" alt="IBM Digital Mindset Certificate" class="certificate-img" />
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/refs/heads/main/image_2025-08-01_183851588.png" alt="IBM Data Science Certificate (Level 1)" class="certificate-img" />
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/refs/heads/main/image_2025-08-05_223436011.png" alt="Cisco Networking Basics Certificate" class="certificate-img" />
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-08-10_185710638.png" alt="IBM Data Science Certificate (Level 1)" class="certificate-img">
-      </div>
+<div class="cert-card" data-desc="Cisco Intro to Cybersecurity">
+<img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/Screenshot%202025-07-12%20162454.png">
+<div class="cert-desc">Cisco Intro to Cybersecurity</div>
+</div>
 
-      <div tabindex="0" role="tabpanel" id="grade10" aria-labelledby="tab10" hidden>
-        <!-- You can add Github Images here-->
-        <p>I haven’t reached this grade level yet.</p>
-      </div>
+<div class="cert-card" data-desc="freeCodeCamp Responsive Web Design">
+<img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/Screenshot%202025-07-12%20181548.png">
+<div class="cert-desc">freeCodeCamp Responsive Web Design</div>
+</div>
 
-      <div tabindex="0" role="tabpanel" id="grade11" aria-labelledby="tab11" hidden>
-        <p>I haven’t reached this grade level yet.</p>
-      </div>
+<div class="cert-card" data-desc="IBM Fundamentals of Cybersecurity">
+<img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-22_180953566.png">
+<div class="cert-desc">IBM Cybersecurity Fundementals</div>
+</div>
 
-      <div tabindex="0" role="tabpanel" id="grade12" aria-labelledby="tab12" hidden>
-        <p>I haven’t reached this grade level yet.</p>
-      </div>
+<div class="cert-card" data-desc="IBM Digital Literacy">
+<img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-24_144407832.png">
+<div class="cert-desc">IBM Digital Literacy</div>
+</div>
 
-      <div tabindex="0" role="tabpanel" id="tutoring" aria-labelledby="tab-tutoring" hidden>
-       <p>Bhavith's Tutoring Qualifications:</p>
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/refs/heads/main/UPchieveTutorCertificate%20(2).png" alt="UPchieve National Tutoring Certification Programme Certificate" class="certificate-img">
-        <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-26_000553251.png" alt="French Certificate" class="certificate-img" />
-      </div>
+<div class="cert-card" data-desc="French Certification">
+<img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-26_000553251.png">
+<div class="cert-desc">French Certificate</div>
+</div>
 
-    </section>
+<div class="cert-card" data-desc="IBM Digital Mindset">
+<img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-07-26_002251041.png">
+<div class="cert-desc">IBM Digital Mindset</div>
+</div>
 
-    <section>
-      <h2>Education</h2>
-      <ul>
-        <li>US 9th Grade / UK Year 10. </li>
-        <li>Self-study: Philosophy, Linguistics, Cybersecurity, Law, Typing, French, Advanced Grade level English, Maths, Science, and History.</li>
-        <li>Future Plans: Get a PhD in Information Security at The University of Cambridge, Become a Chief Information Security Officer (CISO) at Google, and Become a Local Law Enforcement Officer.</li>
-      </ul>
-    </section>
+<div class="cert-card" data-desc="IBM Data Science Level 1">
+<img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/refs/heads/main/image_2025-08-01_183851588.png">
+<div class="cert-desc">IBM Data Science</div>
+</div>
 
-    <section>
-      <h2>Skills</h2>
-      <ul>
-        <li>Python, HTML, CSS, JavaScript</li>
-        <li>Cybersecurity Training</li>
-        <li>Basic Data Science</li>
-        <li>Advanced Linguistics Skills in IPA</li>
-        <li>Studies Philosophy for fun</li>
-      </ul>
-    </section>
+<div class="cert-card" data-desc="Cisco Networking Basics">
+<img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/refs/heads/main/image_2025-08-05_223436011.png">
+<div class="cert-desc">Cisco Networking Basics</div>
+</div>
 
-    <section>
-      <h2>Achievements</h2>
-      <ul>
-        <li>Earned 3 years of credit in the Telugu LOTE CBE. (Achieved in US 8th Grade / UK Year 9 Spring)</li>
-        <li>Earned Algebra 1 credit in the Algebra 1A and 1B CBEs. (Achieved in US 8th Grade / UK Year 9 Summer)</li>
-        <li>High MAP scores in Maths (280), Science (240), and English (242) (Achieved in US 8th Grade / UK Year 9 Spring).</li>
-        <li>Scored 99th percentile in Maths, 99th percentile in Science, 84th percentile in U.S History, and 75th percentile in English STAAR Exams. (Achieved in US 8th Grade / UK Year 9 Summer)</li>
-      </ul>
-    </section>
+<div class="cert-card" data-desc="IBM Data Science Advanced">
+<img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/main/image_2025-08-10_185710638.png">
+<div class="cert-desc">IBM Data Science Tools</div>
+</div>
 
-    <section>
-      <h2>Projects</h2>
-      <ul>
-        <li>This website hosted on GitHub</li>
-        <li>Datacraft Technologies. Link: <a href="https://datacraft-technologies-14506471.codehs.me/index.html" target="_blank" rel="noopener noreferrer">Datacraft Technologies</a> (Made in US 8th Grade / UK Year 9)</li>
-        <li>Video game start screen design using JavaScript Graphics. Link: <a href="https://codehs.com/sandbox/bhavith123/bhavith-v-vg-2nd-2025" target="_blank" rel="noopener noreferrer">JavaScript Design</a> (Made in US 8th Grade / UK Year 9)</li>
-      </ul>
-    </section>
+<div class="cert-card" data-desc="UPchieve Tutor Certificate">
+  <img src="https://raw.githubusercontent.com/Bafythdeveloper/bhavith-portfolio/refs/heads/main/UPchieveTutorCertificate%20(2).png">
+  <div class="cert-desc">National UPchieve Tutoring Certificate</div>
+</div>
 
-   <section>
-      <h2>Contact</h2>
-      <p>Email: <em>bhavithvutukuri@gmail.com</em></p>
-      <p>GitHub: <a href="https://github.com/Bafythdeveloper" target="_blank">github.com/Bafythdeveloper</a></p>
-      <p>Credly: <a href="https://www.credly.com/users/bhavith-vutukuri/badges#credly">Bhavith Vutukuri Credly Dashboard</a></p>
-      <p>Schoolhouse.world: <a href="https://schoolhouse.world/transcript/3a622525-1525-42d7-9c8d-389ec91b9324">Schoolhouse.world Certifications</a></p>
-    </section>
-  </main>
 
-  <footer>
-    &copy; 2025 Bhavith Vutukuri. All rights reserved.
-  </footer>
+</div>
+</section>
+
+<section>
+<h2>Education</h2>
+<p>US 9th Grade / UK Year 10. Advanced coursework across mathematics, science, and computing.</p>
+</section>
+
+<section>
+<h2>Achievements</h2>
+<ul>
+<li>99th percentile Maths & Science</li>
+<li>Advanced placement in Algebra</li>
+<li>High MAP scores</li>
+</ul>
+</section>
+
+<section>
+<h2>Languages</h2>
+<p>English, French (learning), multilingual exposure</p>
+</section>
+
+<section>
+<h2>Projects</h2>
+<ul>
+<li>Portfolio Website</li>
+<li>Datacraft Technologies</li>
+<li>JavaScript Game UI</li>
+</ul>
+</section>
+
+<section>
+<h2>Contact</h2>
+<p>Email: bhavithvutukuri@gmail.com</p>
+<p>GitHub: github.com/Bafythdeveloper</p>
+</section>
+
+</main>
+
+<div class="modal" id="modal">
+<img id="modal-img">
+<p id="modal-text"></p>
+</div>
+
+<footer>
+© 2025 Bhavith Vutukuri
+</footer>
+
 </body>
 </html>
